@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Guac-A-Mole</title>
+    <meta name="description" content="" />
+    <link
+      rel="stylesheet prefetch"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet prefetch"
+      href="https://fonts.googleapis.com/css?family=Coda"
+    />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/animation.css" />
+    <link rel="stylesheet" href="css/resultModal.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>Guac-A-Mole</h1>
+      </header>
+
+      <section class="score-panel">
+        <span class="timer-label"> Time Left: </span>
+        <span class="timer" id="timer"> 00:00:00</span>
+        <br />
+        <span class="score-label"> Score: </span>
+        <span class="score-result" id="score-value"> 0</span>
+        <span class="points-label"> pts</span>
+      </section>
+
+      <ul class="deck" id="gameDeck"></ul>
+    </div>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
