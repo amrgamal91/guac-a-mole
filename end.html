@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Guac-A-Mole</title>
+
+    <meta name="description" content="" />
+    <link
+      rel="stylesheet prefetch"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet prefetch"
+      href="https://fonts.googleapis.com/css?family=Coda"
+    />
+ 
+    <link rel="stylesheet" href="css/start.css" />
+  </head>
+
+  <body>
+    <div class="container start-header">
+      <h1>Game Over</h1>
+
+      <script>
+        var value = localStorage.getItem("score");
+      </script>
+      <h3>
+        Your Score is :
+        <script type="text/javascript">
+          document.write(value);
+        </script>
+      </h3>
+      <div class="button_cont">
+        <a
+          class="play-btn"
+          href="home.html"
+          target="_self"
+          rel="nofollow noopener"
+          >Play Again</a
+        >
+      </div>
+    </div>
+
+  </body>
+</html>

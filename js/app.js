@@ -20,7 +20,7 @@ const createCard = function(id) {
   let ul = document.getElementById("gameDeck");
   let li = document.createElement("li");
   li.className = "card";
-  li.id = "card-" + (id + 1);
+  li.id = /* "card-" + */ id;
   document.getElementById("gameDeck").appendChild(li);
 };
 
@@ -49,62 +49,62 @@ const addImage = function(id, url, index, target) {
   }
 };
 
-const handleCardOpening = function(id, index, target) {
+const handleCardOpening = function(id, index,target) {
+  // console.log("score is ..."+score);
   target.classList.add("open");
   target.classList.add("show");
-  var avocadoCard = document.getElementById(id + "-" + index);
-  avocadoCard.addEventListener("click", function() {
-    IncrementScore();
-    var element = document.getElementById(id + "-" + index);
-    element.parentNode.removeChild(element);
-    addImage("guacmoleImage", "./img/guac.png", index, target);
-  });
+  let avocadoCard = document.getElementById(id + "-" + index);
+  if (avocadoCard) {
+    avocadoCard.addEventListener(
+      "click",
+      handleAvocadoClick,
+      false
+    );
+  }
 };
+function handleAvocadoClick(event) {
+  let element = document.getElementById(event.target.id);
+  let parent =element.parentNode;
+  element && element.parentNode.removeChild(element);
+  let index=event.target.id.split('-')[1];
+  addImage("guacmoleImage", "./img/guac.png", index, parent);
+  IncrementScore();
+}
 
 const IncrementScore = function() {
+  console.log("increment score by 5 .......");
   score += 5;
   var scoreValue = document.getElementById("score-value");
   scoreValue.innerText = score;
 };
 
-const handleCardClosing = function(avocadoId, gucamoleId, index, target) {
+const handleCardClosing = function(avocadoId, guacamoleId, index, target) {
   setTimeout(function() {
-    var element = document.getElementById(gucamoleId + "-" + index);
-    if (element) {
-      element.parentNode.removeChild(element);
-    } else {
-      var element = document.getElementById(avocadoId + "-" + index);
-      element.parentNode.removeChild(element);
+    let avocadoElement = document.getElementById(avocadoId + "-" + index);
+    let guacamoleElement = document.getElementById(guacamoleId + "-" + index);
+    if (avocadoElement) {
+      avocadoElement.parentNode.removeChild(avocadoElement);
     }
-
+    if (guacamoleElement) {
+      guacamoleElement.parentNode.removeChild(guacamoleElement);
+    }
     target.classList.remove("open");
     target.classList.remove("show");
     target.innerHTML = "";
   }, 1500);
 };
 
-const handlePlay = function(index, arr) {
-  arr[index].innerHTML = "";
-  arr[index].addEventListener(
-    "click",
-    function(evt) {
-      //1-add avocado icon
-      addImage("avocadoImage", "./img/avocado.png", index, evt.target);
-      //2-handle click
-      handleCardOpening("avocadoImage", index, evt.target);
-      //3-close card
-      handleCardClosing("guacmoleImage", "avocadoImage", index, evt.target);
-    },
-    false
-  );
-  arr[index].dispatchEvent(event);
-};
 const PlayOneCycle = function() {
   let cards = document.getElementsByClassName("card");
-  let index = Math.floor(Math.random() * 19) + 1;
-  let index_2 = Math.floor(Math.random() * 19) + 1;
+  let index = 0,
+    index_2 = 1;
+  do {
+    index = Math.floor(Math.random() * 19) + 1;
+    index_2 = Math.floor(Math.random() * 19) + 1;
+  } while (index === index_2);
+
   var event = new Event("click");
-  console.log("card index : " + index);
+  // console.log("card index : " + index);
 
   if (cards[index] && cards[index_2]) {
     let arrayOfCards = [cards[index], cards[index_2]];
@@ -114,34 +114,22 @@ const PlayOneCycle = function() {
         "click",
         function(evt) {
           //1-add avocado icon
-          addImage("avocadoImage", "./img/avocado.png", index, evt.target);
+          addImage("avocadoImage", "./img/avocado.png", elem.id, evt.target);
           //2-handle click
-          handleCardOpening("avocadoImage", index, evt.target);
+          handleCardOpening("avocadoImage", elem.id, evt.target);
           //3-close card
-          handleCardClosing("guacmoleImage", "avocadoImage", index, evt.target);
+          handleCardClosing(
+            "avocadoImage",
+            "guacmoleImage",
+            elem.id,
+            evt.target
+          );
         },
         false
       );
       elem.dispatchEvent(event);
     });
   }
-  // if (cards[index]) {
-  //   cards[index].innerHTML = "";
-
-  //   cards[index].addEventListener(
-  //     "click",
-  //     function(evt) {
-  //       //1-add avocado icon
-  //       addImage("avocadoImage", "./img/avocado.png", index, evt.target);
-  //       //2-handle click
-  //       handleCardOpening("avocadoImage", index, evt.target);
-  //       //3-close card
-  //       handleCardClosing("guacmoleImage", "avocadoImage", index, evt.target);
-  //     },
-  //     false
-  //   );
-  //   cards[index].dispatchEvent(event);
-  // }
 };
 
 const redirectToEnd = function() {
@@ -153,57 +141,28 @@ const emptyFlippedCards = function() {
   flippedCards = [];
 };
 
-const resetStarRating = function() {
-  let stars = document.getElementsByClassName("stars");
-  let childcounts = stars[0].childElementCount;
-  for (var i = 0; i < childcounts; i++) {
-    if (stars[0].children[i].children[0].classList.contains("fa-star-o")) {
-      stars[0].children[i].children[0].classList.remove("fa-star-o");
-      stars[0].children[i].children[0].classList.add("fa-star");
-    }
-  }
-};
-
-const resetGame = function() {
-  gameStarted = false;
-  matchFound = 0;
-  moves = 0;
-  emptyFlippedCards();
-  while (document.getElementById("gameDeck").hasChildNodes()) {
-    document
-      .getElementById("gameDeck")
-      .removeChild(document.getElementById("gameDeck").lastChild);
-  }
-  document.getElementsByClassName("moves")[0].innerText = 0;
-  resetStarRating();
-  gameDuration = document.getElementsByClassName("timer")[0].innerText;
-  document.getElementsByClassName("timer")[0].innerText = "00:00:00";
-  stopTimer();
-  playGame();
-};
-
 const startTimer = function() {
-  hours = 0;
+  hours = 1;
   minutes = 1;
   seconds = 60;
 
   gameTimer = setInterval(function() {
     seconds--;
 
-    if (seconds == 60) {
-      seconds = 0;
+    if (seconds == 0) {
+      seconds = 59;
       minutes--;
     }
 
-    if (minutes == 60) {
-      minutes = 0;
-      hours--;
-    }
+    // if (minutes == 0) {
+    //   minutes = 0;
+    //   hours--;
+    // }
     // Compose the string for display
     var currentTimeString =
-      (hours < 10 ? "0" : "") +
-      hours +
-      ":" +
+      // (hours < 10 ? "0" : "") +
+      // hours +
+      // ":" +
       (minutes < 10 ? "0" : "") +
       minutes +
       ":" +
