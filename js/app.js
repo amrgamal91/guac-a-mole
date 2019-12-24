@@ -50,7 +50,6 @@ const addImage = function(id, url, index, target) {
 };
 
 const handleCardOpening = function(id, index,target) {
-  // console.log("score is ..."+score);
   target.classList.add("open");
   target.classList.add("show");
   let avocadoCard = document.getElementById(id + "-" + index);
@@ -62,6 +61,7 @@ const handleCardOpening = function(id, index,target) {
     );
   }
 };
+
 function handleAvocadoClick(event) {
   let element = document.getElementById(event.target.id);
   let parent =element.parentNode;
